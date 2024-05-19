@@ -19,4 +19,9 @@ $(document).ready(function() {
         
         $('#loginModal').hide();
     });
+
+    $('#messageForm').submit(function(event) {
+        event.preventDefault();
+        $('#messageInput').val('');
+    });
 });
