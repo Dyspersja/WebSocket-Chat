@@ -32,6 +32,12 @@ wss.on('connection', ws => {
                         message: 'Logged in successfully' 
                     }));
                     users.set(ws, parsedMessage.username);
+                    let userList = Array.from(users.values());
+
+                    ws.send(JSON.stringify({
+                        type: 'userList',
+                        users: userList
+                    }));
                     console.log('user logged in: ' + parsedMessage.username);
                 }
                 break;
