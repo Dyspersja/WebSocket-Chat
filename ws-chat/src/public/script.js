@@ -55,7 +55,7 @@ $(document).ready(function() {
                 case 'userLogin':
                     $('#users').append('<div class="user" data-username="' + data.username + '">' + data.username + '</div>');
 
-                    $('.user').click(function() {
+                    $('.user').off('click').click(function() {
                         $('.user').removeClass('selected');
                         $(this).addClass('selected');
                         selectedUser = $(this).data('username');
