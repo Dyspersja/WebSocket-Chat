@@ -71,3 +71,17 @@ html, body {
     padding: 10px;    
     font-weight: bold;
 }
+
+.user {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.user:hover {
+    background-color: #ccc;
+}
+
+.user.selected {
+    cursor: auto;
+    background-color: #aaa;
+}

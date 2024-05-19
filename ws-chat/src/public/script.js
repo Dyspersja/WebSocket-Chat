@@ -1,7 +1,8 @@
 $(document).ready(function() {
     let ws;
     let username;
-
+    let selectedUser;
+    
     $('#loginForm').submit(function(event) {
         event.preventDefault();
         
@@ -37,7 +38,19 @@ $(document).ready(function() {
                     }
                     break;
                 case 'userList':
-                    // TODO: Finish
+                    data.users.forEach(user => {
+                        if (user !== username) {
+                            $('#users').append('<div class="user" data-username="' + user + '">' + user + '</div>');
+                        }
+                    });
+
+                    $('.user').click(function() {
+                        $('.user').removeClass('selected');
+                        $(this).addClass('selected');
+                        selectedUser = $(this).data('username');
+
+                        $('#messages').empty();
+                    });
                     break;
                 case 'userLogin':
                     // TODO: Finish
