@@ -73,7 +73,9 @@ $(document).ready(function() {
                     }).remove();
                     break;
                 case 'message':
-                    // TODO: Finish
+                    if (data.from === selectedUser) {
+                        $('#messages').append('<div><strong>' + data.from + ':</strong> ' + data.text + '</div>');
+                    }
                     break;
             }
         }
@@ -94,6 +96,7 @@ $(document).ready(function() {
             from: username, 
             text: message 
         }));
+        $('#messages').append('<div><strong>' + username + ':</strong> ' + message + '</div>');
         $('#messageInput').val('');
     });
 });
