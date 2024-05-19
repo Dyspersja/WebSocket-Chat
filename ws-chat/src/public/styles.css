@@ -16,3 +16,58 @@
     border: 1px solid #888;
     width: fit-content;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#chatContainer {
+    display: flex;
+    height: 100%;
+}
+
+#chatWindow {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+#messageForm {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#userList {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #ccc;
+}
+
+#users {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+#currentUser {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;    
+    font-weight: bold;
+}
