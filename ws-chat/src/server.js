@@ -4,16 +4,27 @@ const WebSocket = require('ws');
 const path = require('path');
 
 const app = express();
-app.use(express.static(path.join(__dirname, 'public')));
-
-const port = 8000;
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
 
 // Map to store connected users and their websockets connections
 let users = new Map();
 // Structure for storing all user chats in memory
 let chatHistory = {};
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/chat-history', (req, res) => {
+    const username = req.query.username;
+    const target = req.query.target;
+
+    const history = chatHistory[username] && chatHistory[username][target] 
+        ? chatHistory[username][target] 
+        : [];
+        
+    res.json({ messages: history });
+});
+
+const port = 8000;
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', ws => {
     console.log('new user connected');
