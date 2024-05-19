@@ -60,7 +60,7 @@ wss.on('connection', ws => {
                     users.forEach((username, ws) => {
                         ws.send(JSON.stringify({
                             type: 'userLogin',
-                            user: parsedMessage.username
+                            username: parsedMessage.username
                         }));
                     });
 
@@ -121,7 +121,7 @@ wss.on('connection', ws => {
         users.forEach((username, ws) => {
             ws.send(JSON.stringify({
                 type: 'userLogout',
-                user: user
+                username: user
             }));
         });        
         console.log('user disconnected: ' + user);

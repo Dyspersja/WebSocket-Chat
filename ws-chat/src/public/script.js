@@ -2,7 +2,7 @@ $(document).ready(function() {
     let ws;
     let username;
     let selectedUser;
-    
+
     $('#loginForm').submit(function(event) {
         event.preventDefault();
         
@@ -53,10 +53,24 @@ $(document).ready(function() {
                     });
                     break;
                 case 'userLogin':
-                    // TODO: Finish
+                    $('#users').append('<div class="user" data-username="' + data.username + '">' + data.username + '</div>');
+
+                    $('.user').click(function() {
+                        $('.user').removeClass('selected');
+                        $(this).addClass('selected');
+                        selectedUser = $(this).data('username');
+
+                        $('#messages').empty();
+                    });
                     break;
                 case 'userLogout':
-                    // TODO: Finish
+                    if (data.username === selectedUser) {
+                        selectedUser = null;
+                        $('#messages').empty();
+                    }
+                    $('#users .user').filter(function() {
+                        return $(this).data('username') === data.username;
+                    }).remove();
                     break;
                 case 'message':
                     // TODO: Finish
