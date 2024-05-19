@@ -12,6 +12,8 @@ const wss = new WebSocket.Server({ server });
 
 // Map to store connected users and their websockets connections
 let users = new Map();
+// Structure for storing all user chats in memory
+let chatHistory = {};
 
 wss.on('connection', ws => {
     console.log('new user connected');
@@ -54,6 +56,45 @@ wss.on('connection', ws => {
                     // Add new user to the users map
                     users.set(ws, parsedMessage.username);  
                     console.log('user logged in: ' + parsedMessage.username);
+                }
+                break;
+            case 'message' :
+                console.log('message content: ' + parsedMessage.text);
+
+                // Retrieve values from parsed message
+                let to = parsedMessage.to;
+                let from = parsedMessage.from;
+                let text = parsedMessage.text;
+
+                // Store new message in chatHistory
+                if (!chatHistory[from]) {
+                    chatHistory[from] = {};
+                }
+                if (!chatHistory[to]) {
+                    chatHistory[to] = {};
+                }
+            
+                if (!chatHistory[from][to]) {
+                    chatHistory[from][to] = [];
+                }
+                if (!chatHistory[to][from]) {
+                    chatHistory[to][from] = [];
+                }
+            
+                const message = { from, text };
+                chatHistory[from][to].push(message);
+                chatHistory[to][from].push(message);
+
+                // Find connection to the message receiver and send the message
+                for (let [ws, username] of users) {
+                    if (username === to) {
+                        ws.send(JSON.stringify({ 
+                            type: 'message', 
+                            from: from, 
+                            text: text 
+                        }));
+                        break;
+                    }
                 }
                 break;
         }
