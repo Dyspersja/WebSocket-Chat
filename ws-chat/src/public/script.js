@@ -81,6 +81,19 @@ $(document).ready(function() {
 
     $('#messageForm').submit(function(event) {
         event.preventDefault();
+
+        if(!selectedUser) {
+            alert('Please select user to message.');
+            return;
+        }
+
+        let message = $('#messageInput').val();
+        ws.send(JSON.stringify({ 
+            type: 'message', 
+            to: selectedUser,
+            from: username, 
+            text: message 
+        }));
         $('#messageInput').val('');
     });
 });
