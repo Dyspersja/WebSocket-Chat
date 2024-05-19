@@ -49,7 +49,7 @@ $(document).ready(function() {
                         $(this).addClass('selected');
                         selectedUser = $(this).data('username');
 
-                        $('#messages').empty();
+                        loadChatHistory();
                     });
                     break;
                 case 'userLogin':
@@ -59,8 +59,8 @@ $(document).ready(function() {
                         $('.user').removeClass('selected');
                         $(this).addClass('selected');
                         selectedUser = $(this).data('username');
-
-                        $('#messages').empty();
+                        
+                        loadChatHistory();
                     });
                     break;
                 case 'userLogout':
@@ -99,4 +99,13 @@ $(document).ready(function() {
         $('#messages').append('<div><strong>' + username + ':</strong> ' + message + '</div>');
         $('#messageInput').val('');
     });
+
+    function loadChatHistory() {
+        $('#messages').empty();
+        $.get('/chat-history', { username: username, target: selectedUser }, function(data) {
+            data.messages.forEach(message => {
+                $('#messages').append('<div><strong>' + message.from + ':</strong> ' + message.text + '</div>');
+            });
+        });        
+    }
 });
