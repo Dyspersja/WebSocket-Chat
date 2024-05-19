@@ -10,6 +10,7 @@ const port = 8000;
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+// Map to store connected users and their websockets connections
 let users = new Map();
 
 wss.on('connection', ws => {
@@ -22,16 +23,19 @@ wss.on('connection', ws => {
         switch(parsedMessage.type) {
             case 'login' :
                 if(isUsernameTaken(parsedMessage.username)) {
+                    // Send error message if username is taken
                     ws.send(JSON.stringify({ 
                         type: 'error', 
                         message: 'Username already taken' 
                     }));
                 } else {
+                    // Send success message if login is successful
                     ws.send(JSON.stringify({ 
                         type: 'success', 
                         message: 'Logged in successfully' 
                     }));
 
+                    // Prepare and send list of current users to the new user
                     let userList = Array.from(users.values());
 
                     ws.send(JSON.stringify({
@@ -39,6 +43,7 @@ wss.on('connection', ws => {
                         users: userList
                     }));
 
+                    // Notify all users about new user login
                     users.forEach((username, ws) => {
                         ws.send(JSON.stringify({
                             type: 'userLogin',
@@ -46,6 +51,7 @@ wss.on('connection', ws => {
                         }));
                     });
 
+                    // Add new user to the users map
                     users.set(ws, parsedMessage.username);  
                     console.log('user logged in: ' + parsedMessage.username);
                 }
@@ -56,7 +62,10 @@ wss.on('connection', ws => {
     ws.on('close', () => {
         let user = users.get(ws);
 
+        // Remove user from the users map
         users.delete(ws);
+
+        // Notify all users about the user logout
         users.forEach((username, ws) => {
             ws.send(JSON.stringify({
                 type: 'userLogout',
