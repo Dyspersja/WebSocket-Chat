@@ -1,0 +1,17 @@
+{
+  "name": "ws-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "jquery": "^3.7.1",
+    "ws": "^8.17.0"
+  }
+}
