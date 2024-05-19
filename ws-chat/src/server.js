@@ -31,13 +31,22 @@ wss.on('connection', ws => {
                         type: 'success', 
                         message: 'Logged in successfully' 
                     }));
-                    users.set(ws, parsedMessage.username);
+
                     let userList = Array.from(users.values());
 
                     ws.send(JSON.stringify({
                         type: 'userList',
                         users: userList
                     }));
+
+                    users.forEach((username, ws) => {
+                        ws.send(JSON.stringify({
+                            type: 'userLogin',
+                            user: parsedMessage.username
+                        }));
+                    });
+
+                    users.set(ws, parsedMessage.username);  
                     console.log('user logged in: ' + parsedMessage.username);
                 }
                 break;
@@ -48,6 +57,12 @@ wss.on('connection', ws => {
         let user = users.get(ws);
 
         users.delete(ws);
+        users.forEach((username, ws) => {
+            ws.send(JSON.stringify({
+                type: 'userLogout',
+                user: user
+            }));
+        });        
         console.log('user disconnected: ' + user);
     });
 });
