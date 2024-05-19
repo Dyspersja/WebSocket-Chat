@@ -10,17 +10,50 @@ const port = 8000;
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+let users = new Map();
+
 wss.on('connection', ws => {
     console.log('new user connected');
     
     ws.on('message', message => {
         console.log('message: ' + message);
+        let parsedMessage = JSON.parse(message);
+
+        switch(parsedMessage.type) {
+            case 'login' :
+                if(isUsernameTaken(parsedMessage.username)) {
+                    ws.send(JSON.stringify({ 
+                        type: 'error', 
+                        message: 'Username already taken' 
+                    }));
+                } else {
+                    ws.send(JSON.stringify({ 
+                        type: 'success', 
+                        message: 'Logged in successfully' 
+                    }));
+                    users.set(ws, parsedMessage.username);
+                    console.log('user logged in: ' + parsedMessage.username);
+                }
+                break;
+        }
     });
     
     ws.on('close', () => {
-        console.log('user disconnected');
+        let user = users.get(ws);
+
+        users.delete(ws);
+        console.log('user disconnected: ' + user);
     });
 });
+
+function isUsernameTaken(username) {
+    for (let user of users.values()) {
+        if(user === username) {
+            return true;
+        }
+    }
+    return false;
+}
 
 server.listen(port, function() {
     console.log(`Server is listening on port: ${port}`);
